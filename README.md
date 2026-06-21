@@ -60,10 +60,11 @@ Click **Next**.
 | Description | Execution role for OrderProcessor Lambda — SQS trigger + SNS publish |
 
 Click **Create role**.
+<img width="975" height="379" alt="image" src="https://github.com/user-attachments/assets/e3c66923-1a6d-4ce2-ad20-20b4b360aa47" />
 
 ### 1.5 Note the Role ARN
 - Open the role you just created.
-- Copy the **ARN** (e.g. `arn:aws:iam::<YOUR_ACCOUNT_ID>:role/OrderProcessorLambdaRole`)
+- Copy the **ARN** (arn:aws:iam::368763426154:role/OrderProcessorLambdaRole)
 
 > **CloudWatch Logs:** `AWSLambdaSQSQueueExecutionRole` already includes `logs:CreateLogGroup`, `logs:CreateLogStream`, and `logs:PutLogEvents`. No extra policy needed.
 
@@ -97,6 +98,16 @@ Leave all other settings at defaults and click **Create queue**. Copy the **Queu
 > **Maximum receives = 3:** If the same message fails 3 times, SQS moves it to the DLQ automatically.
 
 Click **Create queue**. Copy the **Queue URL** and **Queue ARN**.
+<img width="975" height="276" alt="image" src="https://github.com/user-attachments/assets/4a8a24d9-d881-4127-88f1-bc8ec2c62a98" />
+
+OrderDLQ
+ARN: arn:aws:sqs:us-east-1:368763426154:OrderDLQ
+
+OrderQueue
+ARN: arn:aws:sqs:us-east-1:368763426154:OrderQueue
+
+ProcessedOrders
+ARN: arn:aws:sqs:us-east-1:368763426154:ProcessedOrders
 
 ---
 
@@ -165,6 +176,9 @@ SQS → ProcessedOrders → **Access policy** tab → **Edit**. Replace with:
   ]
 }
 ```
+<img width="975" height="333" alt="image" src="https://github.com/user-attachments/assets/eccf31f1-b7aa-4625-a123-0457c891c79f" />
+<img width="975" height="174" alt="image" src="https://github.com/user-attachments/assets/e6aba20c-cb16-46e2-be09-5c49bbce4773" />
+
 
 ---
 
@@ -214,6 +228,8 @@ Configuration → **Environment variables** → **Edit**:
 | `SNS_TOPIC_ARN` | ARN of `OrderNotifications` | Yes |
 | `ALERT_SNS_TOPIC_ARN` | ARN of `OrderAlerts` | Optional |
 
+<img width="975" height="428" alt="image" src="https://github.com/user-attachments/assets/952abc2d-f00b-4e45-8727-f1a368bfdaa6" />
+
 ---
 
 ## Step 5 — Event Source Mapping: Connect SQS to Lambda
@@ -241,6 +257,7 @@ SQS polls (AWS-managed) → Lambda invocation
                     └── SQS retries (up to maxReceiveCount=3)
                            └── moves to OrderDLQ
 ```
+<img width="975" height="428" alt="image" src="https://github.com/user-attachments/assets/fd2255a9-35a2-4054-9c78-f60f7ec5560a" />
 
 ---
 
@@ -293,6 +310,15 @@ OrderProcessor → **Test** tab → Template: `SQS` → replace body with:
 ```json
 "{\"orderId\":\"ORD-TEST\",\"customer\":\"Test User\",\"amount\":9.99}"
 ```
+<img width="975" height="379" alt="image" src="https://github.com/user-attachments/assets/c36314d2-b8a0-4120-ba58-2b97d8f34fa8" />
+
+<img width="975" height="383" alt="image" src="https://github.com/user-attachments/assets/540a3269-fd22-494e-a0b3-357c15443d8f" />
+
+<img width="975" height="443" alt="image" src="https://github.com/user-attachments/assets/342225b8-96bb-4dec-a5bb-c84fb994ae7f" />
+
+<img width="975" height="375" alt="image" src="https://github.com/user-attachments/assets/def0f304-2231-4171-b9df-de31f4f7b5cd" />
+
+<img width="975" height="437" alt="image" src="https://github.com/user-attachments/assets/6b458e01-6ea8-4d29-8566-6696b04b6506" />
 
 ---
 
